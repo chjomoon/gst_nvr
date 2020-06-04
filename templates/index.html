@@ -15,31 +15,34 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-	<div role="tabpanel">
+	    <div role="tabpanel">
 	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" class="active">
+     
+	   <li role="presentation" class="active">
 	      <a href="#camera" aria-controls="cam1" role="tab" data-toggle="tab">
-		<span class="fa fa-film fa-lg" aria-hidden="true"></span>
-		Play Back</a>
-	    </li>
+		    <span class="fa fa-film fa-lg" aria-hidden="true"></span>
+		      Play Back</a>
+     </li>
+     <li role="presentation" >
+        <a id ="stream" href="#live" aria-controls="live" role="tab" data-toggle="tab">
+        <span class="fa fa-video-camera fa-lg" aria-hidden="true"></span>
+          Live Streaming</a>
+     </li>
 </li>
-<li role="presentation">
-  <a href="#live" aria-controls="live" role="tab" data-toggle="tab">
-    <span class="fa fa-video-camera fa-lg" aria-hidden="true"></span>
-    Live Streaming</a>
-</li>
+
 </ul>
 <div class="tab-content">
-  <div role="tabpanel" class="tab-pane active" id="camera">
+  <div role="tabpanel" class="tab-pane  active" id="camera">
     <div class="player pull-left">
-      <video id ="video" controls  height="356" width="640" class="videoCentered" ></video>
+      <video id ="video" controls  height="480" width="640"></video>
     </div>
     <div class="input-group date" id="datetimepicker-camera"></div>
   </div>
-
+ <div role="tabpanel" class="tab-pane" id="live">
+    <video id='hls' controls height="480" width="640" >  </video>
   </div>
 </div>
-
+  </div>  
 </div>
 </div>
 </div>
