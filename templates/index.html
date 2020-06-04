@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <title>NVR Test</title>
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap-datetimepicker.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='dist/video-js.min.css')}}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='dist/video-js.cs')}}s" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css')}}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='hls/hls.min.js')}}"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+	<div role="tabpanel">
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active">
+	      <a href="#camera" aria-controls="cam1" role="tab" data-toggle="tab">
+		<span class="fa fa-film fa-lg" aria-hidden="true"></span>
+		Play Back</a>
+	    </li>
+</li>
+<li role="presentation">
+  <a href="#live" aria-controls="live" role="tab" data-toggle="tab">
+    <span class="fa fa-video-camera fa-lg" aria-hidden="true"></span>
+    Live Streaming</a>
+</li>
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="camera">
+    <div class="player pull-left">
+      <video id ="video" controls  height="356" width="640" class="videoCentered" ></video>
+    </div>
+    <div class="input-group date" id="datetimepicker-camera"></div>
+  </div>
+
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/video.js')}}"></script>
+
+<script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/moment-with-locales.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/lodash.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/main.js')}}"></script>
+<script src="{{url_for('static', filename='js/videojs-contrib-hls.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/video.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/videojs-contrib-hls.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/canvas.js')}}"></script>
+  <script src="{{url_for('static', filename='js/metrics.js')}}"></script>
+
+
+</body>
+</html>
