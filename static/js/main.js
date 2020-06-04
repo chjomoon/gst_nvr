@@ -1,6 +1,5 @@
 jQuery(function ($){
     'use strict';
-    
     $('#datetimepicker-camera').datetimepicker({
 	locale: 'ko',
 	inline: true,
@@ -8,11 +7,9 @@ jQuery(function ($){
 	minDate: moment('20200601', 'YYYYMMDD'),
 	sideBySide: false
     });
-
     $("#datetimepicker-camera").on("dp.change", function (e){
 	loadVideo(e.date.format('YYYYMMDD'));
     });
-    
     $('#stream').on("click", function(){
       var live_url = 'http://192.168.0.237:8000/test/hls/index.m3u8'
       var live = document.getElementById('hls');
@@ -33,9 +30,6 @@ jQuery(function ($){
       });
       }       
     });
-   
-
-    
     function loadVideo(date) {
 	    var cameraRoute = '/home/imr/nms/Node-Media-Server/public/test/'+date + '/index.m3u8';
 	    var video = document.getElementById('video');
@@ -58,5 +52,4 @@ jQuery(function ($){
     	    });        
   	    } 
     }
-    
 });
