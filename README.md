@@ -4,7 +4,8 @@ over Internet to the local hard drive through RTSP.
 
 - Intended for 24/7 video surveillance with IoT resources and simple video review on daily basis.
 - Http live streaming with Gstreamer pipeline media process.
-- Gstreamer, Flask for video capture. Tested on Ubuntu Server 18.04 LTS.
+- Gstreamer, Flask for video capture. 
+- Tested on Ubuntu Server 18.04 LTS.
 
 ![alt example](/images/ui.png "UI layout")
 
