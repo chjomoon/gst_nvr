@@ -5,7 +5,7 @@ App intended for 24/7 video surveillance with ioT resources and simple video rev
 It also provides Http live streaming with Gstreamer pipeline media process.
 
 Uses Gstreamer, Flask for video capture. Tested on Ubuntu Server 18.04 LTS.
-![alt example](/images/ui.png)
+![alt example](/images/ui.png "UI layout")
 
 # Features
 - H264, HLS or RTSP streaming mode
@@ -14,4 +14,5 @@ Uses Gstreamer, Flask for video capture. Tested on Ubuntu Server 18.04 LTS.
 - API to play role as CRUD
 
 # Recording
+## Gstreamer
 
