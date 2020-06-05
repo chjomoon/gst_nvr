@@ -22,7 +22,7 @@ def index():
 API Sample:
 {
 	"date" : "20200604",
-	"iaddr" : "rtsp://192.168.0.11/profile2/media.smp"
+	"iaddr" : "rtsp://iot/address/url"
 }
 """
 #Streaming running based on jsonData from a web server 
