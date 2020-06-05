@@ -22,21 +22,21 @@ def index():
 API Sample:
 {
 	"date" : "20200604",
-	"iaddr" : "rtsp://iot/address/url"
+	"iaddr" : "rtsp://192.168.0.11/profile2/media.smp"
 }
 """
 #Streaming running based on jsonData from a web server 
 def streaming(camera, data):
     global hash_table
     global stream_table
-    print('Rec status : %s'%(str(camera['date'])))    
-    camProc = gst.StreamRecorder(str(camera['iaddr']),str(camera['date']))
+    print('Rec status : %s'%(camera['date']))    
+    camProc = gst.StreamRecorder(camera['iaddr'],camera['date'])
     hash_table.append(camProc)       
     camProc.start()
     data['status'] = 1
     data['inserted'] = camProc.register_date
     data['updated'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    data['stream_url'] = "http://192.168.0.237:8000/"+str(camera['date'])+"/index.m3u8"
+    data['stream_url'] = "http://192.168.0.237:8000/hls/index.m3u8"
     
 #Create camera streaming and register camera information
 @app.route('/api/camera', methods=['POST'])
@@ -46,8 +46,15 @@ def createCamera():
         jsonData = request.get_json()
         data ={}
         if jsonData is None:
-            return 
+            print("\n__________No valid data type_________\n")
+            data ={}
+            data['status'] = 0
+            data['inserted'] = ""
+            data['updated'] = ""
+            data['stream_url'] = ""
+            return jsonify(data)
         else:
+            
             streaming(jsonData, data)
             print(data)
             return jsonify(data)
@@ -59,8 +66,15 @@ def createCamera():
         data['updated'] = ""
         data['stream_url'] = ""
         return jsonify(data)
-                
+
 #request entire list of camera to run the flask server
+def init_hls():
+    data = {}
+    jsonData = {
+        "date" : datetime.datetime.now().strftime("%Y%m%d"),
+        "iaddr" : "rtsp://170.93.143.139:1935/rtplive/0b01b57900060075004d823633235daa" 
+        }
+    streaming(jsonData,data)
 def req():
     global API_HOST
     global API_PATH
@@ -159,12 +173,11 @@ if __name__ == '__main__':
     a module requests webserver to receive API information,
     running a flask server simutaneously 
     """
-    
     """
     #Running all modules
     mainProcs = []
-    proc2 = Process(target = app.run(host='192.168.0.10', port=5000, debug=False))
-    proc = Process(target = req())
+    proc = Process(target = init_hls())
+    proc2 = Process(target = app.run(host='0.0.0.0', port=5000, debug=True))
 
     mainProcs.append(proc)
     mainProcs.append(proc2)
@@ -176,3 +189,4 @@ if __name__ == '__main__':
         proc.join()
     """
     app.run(host='0.0.0.0', port=5000, debug=True)
+
