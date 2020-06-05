@@ -11,9 +11,12 @@ over Internet to the local hard drive through RTSP.
 
 # Features
 - H264, HLS or RTSP streaming mode
-- Live view
-- Simultaneous recording and streaming from IP web cams over Web environment
-- API to play role as CRUD
+- Live Streaming view
+- x264 Encoding output
+- Recording time overlayed with file outputs
+- HLS file segmentation 
+- Simultaneous recording and streaming from IP web cams over Mobile environment
+- Rest API to play a role as CRUD
 
 # Recording
 ## Gstreamer
