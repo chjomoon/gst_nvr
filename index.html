@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <title>NVR Test</title>
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link href="http://vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+	<div role="tabpanel">
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active">
+	      <a href="#camera" aria-controls="cam1" role="tab" data-toggle="tab">
+		<span class="fa fa-film fa-lg" aria-hidden="true"></span>
+		Play Back</a>
+	    </li>
+</li>
+<li role="presentation">
+  <a href="#live" aria-controls="live" role="tab" data-toggle="tab">
+    <span class="fa fa-video-camera fa-lg" aria-hidden="true"></span>
+    Live Streaming</a>
+</li>
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="camera">
+    <div class="player pull-left">
+      <video id ="video" controls ontimeupdate = "playbackTime(this)"  height="356" width="640" class="videoCentered" ></video>
+      <br>
+      <p>Playback Position : <span id="demo"></span></p>
+      <canvas id="bufferedCanvas" height="15" onclick="onClickBufferedRange(event)" width="640" class="videoCentered" style="border:1px solid #000000;" >
+      </canvas>
+    </div>
+    <div class="input-group date" id="datetimepicker-camera"></div>
+  </div>
+
+  </div>
+</div>
+
+</div>
+</div>
+</div>
+<script>
+  function playbackTime(event) {
+      document.getElementById("demo").innerHTML = event.currentTime;
+  }
+  
+  function onClickBufferedRange (event) {
+      let canvas = $('#bufferedCanvas')[0];
+      let v = $('#video')[0];
+      let target = (event.clientX - canvas.offsetLeft) / canvas.width * v.duration;
+      v.currentTime = target;
+  }
+</script>
+
+
+<script src="https://unpkg.com/video.js/dist/video.js"></script>
+<script src="https://unpkg.com/videojs-contrib-quality-levels/dist/videojs-contrib-quality-levels.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/moment-with-locales.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/lodash.min.js"></script>
+<script src="js/main.js"></script>
+
+<script src="http://vjs.zencdn.net/7.3.0/video.min.js"></script>
+<script src="js/video.min.js"></script>
+<script src="js/videojs-contrib-hls.min.js"></script>
+    <script src="js/canvas.js"></script>
+  <script src="js/metrics.js"></script>
+
+
+</body>
+</html>
