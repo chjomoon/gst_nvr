@@ -3,7 +3,7 @@
 from multiprocessing import Process
 from flask import Flask, request,render_template, redirect,url_for, jsonify
 from flask_cors import CORS
-import gst_hls as gst
+import gst.hls as gst
 import datetime, time, os, shutil, sys, requests
 
 app = Flask(__name__)
@@ -175,4 +175,4 @@ if __name__ == '__main__':
     for proc in mainProcs:
         proc.join()
     """
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
