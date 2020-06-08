@@ -37,7 +37,7 @@ GStreamer plays a role as filtering RTSP sources with high quality and overlayed
 
 ![alt example](/images/gst_constructor.png "Pipeline design")
 
-While GStreamer pipeline receives sources(RTSP, file, or URI), it passes through each elements to produce the output by exchanging  specific types of messages. A bus is a simple system that takes care of forwarding messages from the streaming threads to an application in its own thread context. When the mainloop is running or the pipeline state is PLAYING, the bus will periodically be checked for new messages, and the callback will be called when any message is available.
+While a pipeline receives sources(RTSP, file, or URI), it passes through each steps of elements to produce the output by exchanging specific messages. A bus is a simple system that takes care of forwarding messages from the streaming threads to an application in its own thread context. When the mainloop is running or the pipeline state is PLAYING, the bus will periodically be checked for new messages, and the callback will be called when any message is available.
 
 ![alt example](/images/gst_message.png "Message Bus")
 
