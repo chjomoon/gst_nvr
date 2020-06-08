@@ -41,6 +41,8 @@ While a pipeline receives sources(RTSP, file, or URI), it passes through each st
 
 ![alt example](/images/gst_message.png "Message Bus")
 
+![alt example](/images/gst_message2.png "State Update")
+
 ## Flask
 This Python app used to control video recording process, recording itself is performed by Gstreamer media processing. 
 Flask server makes this Python app available to communicate with UI by sending and receiving API to run a program. 
