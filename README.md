@@ -26,6 +26,7 @@ This app supports a HLS format to stream and record at the same time to increase
 
 ![alt example](/images/ts_sample.png "UI CRUD")
 
+![alt example](/images/ui4.png "UI layout2")
 
 ## Gstreamer
 GStreamer is a streaming media framework based on a pipelined structure. The functionality to process media is provided by plugins such as  elements, bins, etc. This allows new functionality to be added simply by installing new plug-ins.
