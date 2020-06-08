@@ -34,6 +34,7 @@ GStreamer is a streaming media framework based on a pipelined structure. The fun
 Based on configuration and schedule, python app creates instances of gstreamer pipeline and live streaming media player. 
 
 GStreamer plays a role as filtering RTSP sources with high quality and overlayed real-time records. Furthermore, it produces bunch of mpegts files for streaming and recording simultaneously. These files are saved at the end of day at specific format for playing back later.
+
 ![alt example](/images/gst_constructor.png "Pipeline design")
 
 ## Flask
