@@ -1,8 +1,6 @@
 import multiprocessing as mp
-import sys, os, time, datetime, re, json
+import sys
 import gi
-import json,shutil
-import requests
 gi.require_version('Gst', '1.0')
 from gi.repository import GObject, Gst
 
@@ -11,14 +9,12 @@ class StreamRecorder(mp.Process):
     def __init__(self,seq,gid,name,format_type):
         """
         gst-launch-1.0 souphttpsrc location=http://192.168.0.14:8000/1/1/hls/index.m3u8 ! hlsdemux 
-        ! filesink location=out.mp4
-
+        ! filesink location=out.avi
         Initialize the stream recording prossess
-        link - rtsp link of stream
-        rec - flag whether to determine recording or not
         seq - sequence number of the camera
         gid - group id of the camera
         name - name of the camera
+        format_type - Sink format
         """
         super().__init__()
         Gst.init(None)
@@ -29,33 +25,17 @@ class StreamRecorder(mp.Process):
         self._gid = gid
         self._link = "http://192.168.0.237:8000/"+str(self._gid)+"/"+str(self._seq)+"/hls/index.m3u8"
         self._ftype = format_type
-        self._register_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self._rec_start = datetime.datetime.now()
-        self._rec_done = datetime.datetime.now()
-        self._init_time = self._rec_start.strftime("%H:%M:%S")
-
+        
         self.pipeline = Gst.parse_launch("""souphttpsrc name=m_src ! hlsdemux ! filesink name=m_sink""")
         #directory details
         path="/home/imr/nms/Node-Media-Server/public/"
         self.directory = path+str(self._gid)+"/"+str(self._seq)
-        self.today = datetime.date.today().strftime('%Y%m%d')
 
-        #make directory
-        """
-        if not os.path.isdir(path+str(self._gid)):
-            os.mkdir(path+str(self._gid))    
-        if not os.path.isdir(self.directory):
-            os.mkdir(self.directory)
-        
-        if not os.path.isdir(self.directory +"/"+ self.today):
-            os.mkdir(self.directory+"/"+ self.today)
-        if not os.path.isdir(self.directory+"/"+self.today+"/"+self._init_time):
-            os.mkdir(self.directory+"/"+ self.today+"/"+self._init_time)
-        """
+        #set location
         if self._ftype == "mp4":
-            self.location = self.directory+"/hls/file.mp4"
+            self.location = self.directory+"/hls/final.mp4"
         elif self._ftype == "avi":
-            self.location = self.directory+"/hls/file.avi"
+            self.location = self.directory+"/hls/final.avi"
             
         #source params
         self.source = self.pipeline.get_by_name("m_src")
@@ -81,25 +61,6 @@ class StreamRecorder(mp.Process):
     @property
     def ftype(self):
         return self._ftype
-    @property
-    def rec_start(self):
-        return self._rec_start
-    @property
-    def rec_done(self):
-        return self._rec_done
-    @property
-    def register_date(self):
-        return self._register_date
-    #date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    @rec_start.setter
-    def rec_start(self, date):
-        self._rec_start = date
-    @rec_done.setter
-    def rec_done(self, date):
-        self._rec_done = date
-    @register_date.setter
-    def register_date(self, date):
-        self._register_date = date
     @link.setter
     def link(self,link):
         self._link = link
@@ -116,7 +77,7 @@ class StreamRecorder(mp.Process):
     def ftype(self,format_type):
         self._ftype = format_type
 
-    def message(self, bus, pipeline, today, start, done):
+    def message(self, bus, pipeline):
         t0 = time.time()
         while True:
             try:
@@ -147,9 +108,7 @@ class StreamRecorder(mp.Process):
                             Gst.Element.state_get_name(old_state),Gst.Element.state_get_name(new_state)))
                         pass
                 elif t == Gst.MessageType.STREAM_START:
-                    print("Stream Start")
-                    start = datetime.datetime.now()
-                    print(self._rec_start.strftime("%Y-%m-%d %H:%M:%S"))
+                    print("Stream Start")                  
                 else:
                     print(t)
                     print("Unknown message: %s" % msg)
@@ -161,22 +120,13 @@ class StreamRecorder(mp.Process):
 
     def stop(self):     
         self.pipeline.set_state(Gst.State.NULL)
-        #shutil.move(self.directory+"/hls", self.directory+"/"+ self.today +"/"+self._init_time)
 
     def run(self):
         #start to record
-        print("Streaming Registered on %s" %(self._register_date))
         self.pipeline.set_state(Gst.State.PLAYING)
-
         bus = self.pipeline.get_bus()
-
         #bus = self.pipeline.get_bus()
         print("Bus message gets")
-        self.message(bus, self.pipeline,self.today,self._rec_start,self._rec_done)
-
+        self.message(bus, self.pipeline)
         #free the streaming
-        """
-        self.pipeline.set_state(Gst.State.NULL)
-        shutil.move(self.directory+"/hls", self.directory+"/"+ self.today +"/"+self._init_time)
-        """
         self.stop()
