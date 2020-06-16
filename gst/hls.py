@@ -30,7 +30,7 @@ class StreamRecorder(mp.Process):
         self._table = {}
         self._init_time = self._rec_start.strftime("%H:%M:%S")
         
-        self.pipeline = Gst.parse_launch("""rtspsrc name=m_rtspsrc ! capsfilter caps="application/x-rtp,media=video" ! decodebin ! clockoverlay time-format="%D %H:%M:%S" ! x264enc ! mpegtsmux ! hlssink name=m_hlssink""")
+        self.pipeline = Gst.parse_launch("""rtspsrc name=m_rtspsrc ! capsfilter caps="application/x-rtp,media=video" ! decodebin ! clockoverlay time-format="%D %H:%M:%S" halignment=center valignment=top text="문찬조" font-desc="Sans, 24" ! x264enc ! mpegtsmux ! hlssink name=m_hlssink""")
         
         #directory details
         self.today = datetime.date.today().strftime('%Y%m%d')
