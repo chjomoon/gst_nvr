@@ -43,11 +43,60 @@ Based on configuration and schedule, python app creates instances of gstreamer p
 
 GStreamer plays a role as filtering RTSP sources with high quality and overlayed real-time records. Furthermore, it produces bunch of mpegts files for streaming and recording simultaneously. These files are saved at the end of day at specific format for playing back later.
 
-![alt example](/images/gst_constructor.png "Pipeline design")
+![alt example](/images/pipeline.png "Pipeline design")
+
+<pre><code>
+self.pipeline = Gst.parse_launch(
+            """rtspsrc name=m_rtspsrc ! capsfilter caps="application/x-rtp,media=video" ! decodebin !
+            clockoverlay halignment=left valignment=bottom text = "IMR" time-format="%D %H:%M:%S"
+            font-desc="Sans,15" shaded-background=true ! x264enc ! tee name = t
+            t. ! queue ! mpegtsmux ! hlssink name=m_hlssink t. ! queue ! mpegtsmux ! hlssink name=m_recsink""")
+
+#source params
+self.source = self.pipeline.get_by_name("m_rtspsrc")
+self.source.set_property('location', self.link)
+
+#hlssink params
+self.sink = self.pipeline.get_by_name("m_hlssink")
+self.sink.set_property('location', self.location)
+self.sink.set_property('playlist-location', self.playlist)
+self.sink.set_property('target-duration', 1)
+self.sink.set_property('max-files', 10)
+self.sink.set_property('playlist-length', 10)
+
+self.sink2 = self.pipeline.get_by_name("m_recsink")
+self.sink2.set_property('location', self.rec_seg)
+self.sink2.set_property('playlist-location', self.rec_index)
+self.sink2.set_property('target-duration', 10)
+self.sink2.set_property('max-files', 999999)
+self.sink2.set_property('playlist-length', 0)
+
+</pre></code>
 
 While a pipeline receives sources(RTSP, file, or URI), it passes through each steps of elements to produce the output by exchanging specific messages. A bus is a simple system that takes care of forwarding messages from the streaming threads to an application in its own thread context. When the mainloop is running or the pipeline state is PLAYING, the bus will periodically be checked for new messages, and the callback will be called when any message is available.
 
-![alt example](/images/gst_message.png "Message Bus")
+<pre><code>
+t = msg.type
+if t ==Gst.MessageType.EOS:
+    print("End of Stream")
+    break
+elif t == Gst.MessageType.ERROR:
+    print('inner 1: ', self.error_msg)
+    err, debug = msg.parse_error()
+    self.error_msg = debug
+    print("inner 2: %s" % self.error_msg)
+    break
+elif t == Gst.MessageType.WARNING:
+    err, debug = msg.parse_warning()
+    print("Warning: %s" % err, debug)
+    pass
+elif t == Gst.MessageType.STATE_CHANGED:
+    if msg.src == self.pipeline:
+        old_state, new_state, pending_state = msg.parse_state_changed()
+        print("Pipeline state changed from {0:s} to {1:s}".format(
+            Gst.Element.state_get_name(old_state),Gst.Element.state_get_name(new_state)))
+    pass
+</pre></code>
 
 ![alt example](/images/gst_message2.png "State Update")
 
@@ -56,7 +105,29 @@ This Python app used to control video recording process, recording itself is per
 Flask server makes this Python app available to communicate with UI by sending and receiving API to run a program. 
 App performs recording monitoring, recording scheduling, and cleaning.
 
-![alt example](/images/flask_crud1.png "UI CRUD")
+<pre><code>
+#Create camera streaming and register camera information
+@app.route('/api/camera', methods=['POST'])
+def createCamera():
+    #get api
+    jsonData = request.get_json()
+    data =[]
+    if jsonData is None:
+        print("No valid data received\n")
+        data ={}
+        data['status'] = 0
+        data['inserted'] = ""
+        data['updated'] = ""
+        data['stream_url'] = ""
+        return jsonify(data)
+    else:
+        streaming(jsonData, data)
+        print(data)
+        t0 = time.time()
+        while True:
+            if time.time() - t0 > 3:
+                return jsonify(data)
+</pre></code>
 
 ![alt example](/images/API_test.png "API Test")
 
