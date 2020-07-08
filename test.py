@@ -3,6 +3,7 @@
 from multiprocessing import Process
 from flask import Flask, request,render_template, redirect,url_for, jsonify
 from flask_cors import CORS
+import PTZ.ptz_controller as ptz_controller
 import gst.hls as gst
 import datetime, time, os, shutil, sys, requests
 
@@ -25,6 +26,20 @@ API Sample:
 	"iaddr" : "rtsp://192.168.0.11/profile2/media.smp"
 }
 """
+
+#basic get
+@app.route('/', methods=['GET'])
+def hello_world():
+	return "Hello World"
+
+#onvif control API
+@app.route('/api/camera/ptz', methods=['PUT'])
+def ptz():
+    json = request.get_json()
+    print("received direction________:\n" ,json['direction'])
+    ptz_controller.media_profile_configuration(json['direction'])
+    return "true"
+
 #Streaming running based on jsonData from a web server 
 def streaming(camera, data):
     global hash_table
