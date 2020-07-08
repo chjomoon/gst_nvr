@@ -3,7 +3,7 @@
 from multiprocessing import Process
 from flask import Flask, request,render_template, redirect,url_for, jsonify
 from flask_cors import CORS
-import PTZ.ptz_controller as ptz_controller
+import ptz.ptz_controller as ptz_controller
 import gst.hls as gst
 import datetime, time, os, shutil, sys, requests
 
