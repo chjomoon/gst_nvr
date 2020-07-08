@@ -10,7 +10,7 @@ over Internet to the local hard drive through RTSP.
 
 ![alt example](/images/ui.png "UI layout")
 
-# Features
+### Features
 - H264, HLS or RTSP streaming mode
 - Live Streaming view
 - x264 Encoding output
@@ -20,7 +20,7 @@ over Internet to the local hard drive through RTSP.
 - Rest API to play a role as CRUD
 - PTZ control over UI
 
-# Sample User Interface
+### Sample User Interface
 - From the first tab, User can review recorded video format (.m3u8) by choosing a date on UI. The other tab contains HLS from NVR devices that is available to watch real time video from the HLS.js media player. 
 - Calendar at right shows dates for which recorded files are found. User can choose date, choose camera, watch recorded video on any tablet or smartphone.
 - Based on HTML5, UI is designed not only for a desktop PC, but also various devices such as smartphones, or iPad/ Android tablets by using Bootstrap library	
@@ -28,15 +28,15 @@ over Internet to the local hard drive through RTSP.
 
 ![alt example](/images/ui4.png "UI layout2")
 
-# Recording
-## Http Live Streaming (HLS)
+## Recording
+### Http Live Streaming (HLS)
 HTTP Live Streaming (HLS) sends audio and video over HTTP from an ordinary web server for playback on mobile devices, especially for iOS-based devices, and personal computers. Using the same protocol that powers the web, HLS deploys content using ordinary web servers and content delivery networks. HLS is designed for reliability and dynamically adapts to network conditions by optimizing playback for the available speed of wired and wireless connections.
 
 This app supports a HLS format to stream and record at the same time to increase the functionality and reduce a time consuming tasks by multiprocessing the modules. Since the sample UI is designed with Hls.js, not only user can watching HLS media on Safari, but also any types of web broswer can be played HLS as well.  
 
 ![alt example](/images/ts_sample.png "UI CRUD")
 
-## Gstreamer
+### Gstreamer
 GStreamer is a streaming media framework based on a pipelined structure. The functionality to process media is provided by plugins such as  elements, bins, etc. This allows new functionality to be added simply by installing new plug-ins.
 
 Based on configuration and schedule, python app creates instances of gstreamer pipeline and live streaming media player. 
@@ -100,7 +100,7 @@ elif t == Gst.MessageType.STATE_CHANGED:
 
 ![alt example](/images/gst_message2.png "State Update")
 
-## Flask
+### Flask
 This Python app used to control video recording process, recording itself is performed by Gstreamer media processing. 
 Flask server makes this Python app available to communicate with UI by sending and receiving API to run a program. 
 App performs recording monitoring, recording scheduling, and cleaning.
@@ -131,8 +131,9 @@ def createCamera():
 
 ![alt example](/images/API_test.png "API Test")
 
-## H.264 format
+### H.264 format
 h264 is an inevitable encoding format. It is much better than MJPEG. With the same frame rate, h264 will require five times smaller network bandwidth than MJPEG. That mean that at the same bit rate you will get much better image quality.
+
 
 ![alt example](/images/gst.jpg "Gstreamer")
 
@@ -156,7 +157,7 @@ https://gstreamer.freedesktop.org/documentation
 
 Gst-launch-1.0 : Gstreamer상에서 파이프라인을 실행시켜주는 도구.  파이프라인을 parsing하여 영상처리
 
-## 설치 
+### 설치 
 
 리눅스상에서 Gstreamer 설치유무 확인:
 
@@ -201,7 +202,7 @@ $ sudo apt-get install libgstreamer-plugins-base1.0-dev
 
 ![alt example](/images/gst-test.png "GST Theme")
 
-## Element : GstElement class 에서 파생된 object. 
+### Element : GstElement class 에서 파생된 object. 
 
 소스와 싱크는 패드를 통해 연결
 
@@ -215,7 +216,7 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 
 데이터의 생산자(source or src)와 소비자(sink element) Element
 
-## 주요 Elements (RTSP streaming 기능 위주) :
+#### 주요 Elements (RTSP streaming 기능 위주) :
 
 * rtspsrc : RTSP로 생성된 영상 소스를 불러오는 Element
 
@@ -242,13 +243,13 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 * queue : 순서에 맞게  Element 간의 쓰레드를 분리. 
 
 
-## Bin: element를 모아놓은 container. 
+### Bin: element를 모아놓은 container. 
 
 * 여러개의 element를 연결하여 하나의 논리적 element로 통합 가능
 
 * Pipeline을 이용해 bin을 작은 단위로 쪼갤수 있기때문에 Pipeline의 복잡도가 상승 할 때 사용하면 용이함
 
-## Pipeline : element를 조합하여 동기화 및 버스 메시지 관리를 위한 포괄적인 container. 
+### Pipeline : element를 조합하여 동기화 및 버스 메시지 관리를 위한 포괄적인 container. 
 
 * GStreamer 영상 처리 시 가장 기본적으로 구성  
 
@@ -272,7 +273,7 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 
     in the PLAYING state, an element does exactly the same as in the PAUSED state, except that the clock now runs.
 
-## Bus - application과 pipeline 사이의 데이터 교환 또는 통신을 위한 메커니즘
+### Bus - application과 pipeline 사이의 데이터 교환 또는 통신을 위한 메커니즘
 
     메시지를 생성하여 event를 확인하고 결과값을 파이프라인으로 전송. 
     
@@ -308,7 +309,7 @@ pipeline.set_state(Gst.State.NULL) #작업완료, EOS, 또는 에러 발생시 �
 * 스트리밍 : 네트워크 기반 비디오, 오디오 등의 멀티미디어 정보를 제공하는 기술로 다운로드없이 실시간으로 재생가능.
 * 재생 시간이 단축되며 HDD 용량에도 영향을 받지 않는다.
 
-## HLS : m3u8의 확장자를 가진 재생목록 파일과 다수의 ts 영상을 HTTP를 통해 전송하는 방식
+### HLS : m3u8의 확장자를 가진 재생목록 파일과 다수의 ts 영상을 HTTP를 통해 전송하는 방식
 
 * m3u8 : UTF-8으로 인코딩된 m3u파일
 
@@ -355,7 +356,7 @@ file000002.ts
 
 # ONVIF
 
-### ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
+#### ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
 
 네트워크 비디오 장치 간 통신의 표준화
 
@@ -371,7 +372,7 @@ file000002.ts
 
 * SOAP(Simple Object Access Protocol) : HTTP, HTTPS, SMTP를 사용하여 통신하고 XML을 주고받는 프로토콜
 
-## PTZ(Pan-Tilt-Zoom) : 카메라에 내장된 옵션으로 방향과 확대/축소를 원격으로 제어기능 
+#### PTZ(Pan-Tilt-Zoom) : 카메라에 내장된 옵션으로 방향과 확대/축소를 원격으로 제어기능 
 
 * Pan : 디바이스의 수평적 움직임 또는 회전
 
@@ -379,7 +380,7 @@ file000002.ts
 
 * Zoom : 디바이스 렌즈의 초점 조절, 출력 화면의 확대 및 축소 
 
-## NVIF 파이썬 라이브러리 
+#### NVIF 파이썬 라이브러리 
 
 설치: 
 
@@ -425,7 +426,7 @@ ptz_configuration_options = ptz.GetConfigurationOptions(request)
 moverequest = ptz.create_type('ContinuousMove')
 moverequest.ProfileToken = media_profile.token
 </pre></code>
-## ContinuousMove
+#### ContinuousMove
 
 정의: 지속적인 PTZ 동작을 작동하기위한 함수. 기본적인 space set은 PTZConfiguration 적용.
 
@@ -458,7 +459,7 @@ def move_right(ptz, request):
   ptz.ContinousMove(request)
 </pre></code>
 
-## Stop
+#### Stop
 
 정의: 절대적, 상대적, 지속적 형식으로 진행중인 PTZ 움직임을 정지시키는 함수. Pan, tilt, zoom 의 설정이 없을시, 디바이스 전체동작 정지
 
