@@ -135,10 +135,8 @@ def createCamera():
 h264 is an inevitable encoding format. It is much better than MJPEG. With the same frame rate, h264 will require five times smaller network bandwidth than MJPEG. That mean that at the same bit rate you will get much better image quality.
 
 
-![alt example](/images/gst.jpg "Gstreamer")
-
 # GStreamer
-
+![alt example](/images/gst.jpg "Gstreamer")
 https://gstreamer.freedesktop.org/documentation
 
 파이프라인 기반의 영상처리 오픈소스 프레임워크.
@@ -304,7 +302,9 @@ bus = pipeline.get_bus() #파이프라인 element간 메시지 공유, message �
 pipeline.set_state(Gst.State.NULL) #작업완료, EOS, 또는 에러 발생시 기능종료
 
 </pre></code>
+
 # HTTP Live Streaming (HLS)
+![alt example](/images/hls_top.png "HLS Topology")
 
 * 스트리밍 : 네트워크 기반 비디오, 오디오 등의 멀티미디어 정보를 제공하는 기술로 다운로드없이 실시간으로 재생가능.
 * 재생 시간이 단축되며 HDD 용량에도 영향을 받지 않는다.
@@ -352,9 +352,10 @@ file000002.ts
 |#EXT-X-DISCONTINUITY | #EXT-X-DISCONTINUITY | 이 지시어가 표지된 줄을 기준으로 이전 줄과 이후 줄에서 재생하는 콘텐츠의 정보 변경되었음을 표시.|
 |#EXT-X-KEY |#EXT-X-KEY: <암호화 방법>[, <key>]| 암호화된 파일을 해독하는 키 값을 명시. HTTP Live Streaming에서는 재생 시간에 따라 분할된 각 파일을 암호화하여 전송. 암호화된 파일을 해독할 때 필요한 키 값을 플레이어에게 알려 주기 위해 사용. |
 
-![alt example](/images/onvif.png "ONVIF")
 
 # ONVIF
+
+![alt example](/images/onvif.png "ONVIF")
 
 #### ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
 
