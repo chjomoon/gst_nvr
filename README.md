@@ -166,6 +166,7 @@ Gst-launch-1.0 : Gstreamer상에서 파이프라인을 실행시켜주는 도구
 
 `/usr/bin/gst-launch-1.0`
 
+
 필요한 패키지 설치:
 
 `$ sudo apt-get install libgstreamer1.0-0 sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good 
@@ -198,6 +199,7 @@ $ sudo apt-get install libgstreamer-plugins-base1.0-dev
 
 `$ gst-launch-1.0 videotestsrc ! autovideosink`
 
+![alt example](/images/gst-test.png "GST Theme")
 
 ## Element : GstElement class 에서 파생된 object. 
 
