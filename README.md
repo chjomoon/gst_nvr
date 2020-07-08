@@ -5,6 +5,7 @@ over Internet to the local hard drive through RTSP.
 - Intended for 24/7 video surveillance with IoT resources and simple video review on daily basis.
 - Http live streaming with Gstreamer pipeline media process.
 - Gstreamer, Flask for video capture. 
+- ONVIF PTZ Control available if the device supports PTZ
 - Tested on Ubuntu Server 18.04 LTS.
 
 ![alt example](/images/ui.png "UI layout")
@@ -17,6 +18,7 @@ over Internet to the local hard drive through RTSP.
 - HLS file segmentation 
 - Simultaneous recording and streaming from IP web cams over Mobile environment
 - Rest API to play a role as CRUD
+- PTZ control over UI
 
 # Sample User Interface
 - From the first tab, User can review recorded video format (.m3u8) by choosing a date on UI. The other tab contains HLS from NVR devices that is available to watch real time video from the HLS.js media player. 
@@ -99,29 +101,29 @@ sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 sudo apt-get install gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools`
 
 에러 발생시 한줄씩 설치:
+<pre><code>
+$ sudo apt-get install libgstreamer1.0-0 
 
-`$ sudo apt-get install libgstreamer1.0-0 `
+$ sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good
 
-`$ sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good`
+$ sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 
-`$ sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly`
-
-`$ sudo apt-get install gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools`
-
+$ sudo apt-get install gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools
+</pre></code>
 파이썬 GStreamer 라이브러리 설치:
 
 `$sudo apt-get install python-gst-1.0 python3-gst-1.0`
 
 dev-packages 설치 :
+<pre><code>
+$ sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
 
-`$ sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev `
+$ sudo apt-get install libfontconfig1-dev libfreetype6-dev libpng-dev
 
-`$ sudo apt-get install libfontconfig1-dev libfreetype6-dev libpng-dev`
+$ sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev 
 
-`$ sudo apt-get install libcairo2-dev libjpeg-dev libgif-dev `
-
-`$ sudo apt-get install libgstreamer-plugins-base1.0-dev`
-
+$ sudo apt-get install libgstreamer-plugins-base1.0-dev
+</pre></code>
 기본 command line:
 
 `$ gst-launch-1.0 videotestsrc ! autovideosink`
@@ -209,27 +211,26 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 
 프로그래밍 기본 구성(Python) :
 
-`gi.require_version('Gst', '1.0')`
+<pre><code>
+gi.require_version('Gst', '1.0')
 
-`from gi.repository import GObject, Gst #파이썬 상에서 Gstreamer 프레임워크 적용`
-
-``
-
-`Gst.init(None) #초기화`
-
-`pipeline = Gst.parse_launch(“””파이프라인 구성 요소 추가“””)`
+from gi.repository import GObject, Gst #파이썬 상에서 Gstreamer 프레임워크 적용
 
 
-`element = pipeline.get_by_name(“element name”)`
+Gst.init(None) #초기화
 
-`element.set_property(‘option’, ‘value’)`
+pipeline = Gst.parse_launch(“””파이프라인 구성 요소 추가“””)
 
-`pipeline.set_state(Gst.State.PLAYING) #Gstreamer 기능 수행`
+element = pipeline.get_by_name(“element name”)
+element.set_property(‘option’, ‘value’)
 
-`bus = pipeline.get_bus() #파이프라인 element간 메시지 공유, message 함수 필요`
+pipeline.set_state(Gst.State.PLAYING) #Gstreamer 기능 수행
 
-`pipeline.set_state(Gst.State.NULL) #작업완료, EOS, 또는 에러 발생시 기능종료`
+bus = pipeline.get_bus() #파이프라인 element간 메시지 공유, message 함수 필요
 
+pipeline.set_state(Gst.State.NULL) #작업완료, EOS, 또는 에러 발생시 기능종료
+
+</pre></code>
 # HTTP Live Streaming (HLS)
 
 * 스트리밍 : 네트워크 기반 비디오, 오디오 등의 멀티미디어 정보를 제공하는 기술로 다운로드없이 실시간으로 재생가능.
@@ -253,27 +254,20 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 
         I-frame (Intra frame) : 화면 전체가 압축되어 들어 있는 frame
 
-`#EXTM3U`
+<pre><code>
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-ALLOW-CACHE:NO
+#EXT-X-MEDIA-SEQUENCE:1
 
-`#EXT-X-VERSION:3`
-
-`#EXT-X-ALLOW-CACHE:NO`
-
-`#EXT-X-MEDIA-SEQUENCE:1`
-
-`#EXT-X-TARGETDURATION:3`
-
-`#EXTINF:3.4995403289794922,`
-
-`file000000.ts`
-
-`EXTINF:3.3863615989685059,`
-
-`file000001.ts`
-
-`#EXTINF:3.3931219577789307,`
-
-`file000002.ts`
+#EXT-X-TARGETDURATION:3
+#EXTINF:3.4995403289794922,
+file000000.ts
+EXTINF:3.3863615989685059,
+file000001.ts
+#EXTINF:3.3931219577789307,
+file000002.ts
+</pre></code>
 
 |  지시어 | 형식 | 설명 |
 | ------ | ------ | ------ |
@@ -286,159 +280,132 @@ Element는 plugin으로 감싸져야 Gstreamer 에서 사용
 |#EXT-X-DISCONTINUITY | #EXT-X-DISCONTINUITY | 이 지시어가 표지된 줄을 기준으로 이전 줄과 이후 줄에서 재생하는 콘텐츠의 정보 변경되었음을 표시.|
 |#EXT-X-KEY |#EXT-X-KEY: <암호화 방법>[, <key>]| 암호화된 파일을 해독하는 키 값을 명시. HTTP Live Streaming에서는 재생 시간에 따라 분할된 각 파일을 암호화하여 전송. 암호화된 파일을 해독할 때 필요한 키 값을 플레이어에게 알려 주기 위해 사용. |
 
+# ONVIF
 
-# API(Application programming interface)
+## ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
 
-파이썬 상에서 만든 기능을 UI에서 구현 할 수 있도록 JSON을 통해 필요한 정보를 주고 받는 인터페이스.
+네트워크 비디오 장치 간 통신의 표준화
 
-Flask를 사용하여 REST API형식으로 필요한 데이터를 요청하거나 받아서 기능을 실행.
+제조업체와 무관한 네트워크 비디오 제품 간 상호 운용성
 
-* 카메라 API 목록
-: 사용법 http://IP:PORT/api/camera
+모든 기업과 단체에 대한 개방
+
+주요 기술:
+
+* Web Service: HTTP, XML 기반으로 제공되는 서비스
+
+* WSDL(Web Services Description Language) : 어떤 Web Service를 제공하는지 기술한 XML 문서
+
+* SOAP(Simple Object Access Protocol) : HTTP, HTTPS, SMTP를 사용하여 통신하고 XML을 주고받는 프로토콜
+
+## PTZ(Pan-Tilt-Zoom) : 카메라에 내장된 옵션으로 방향과 확대/축소를 원격으로 제어기능 
+
+* Pan : 디바이스의 수평적 움직임 또는 회전
+
+* Tilt : 디바이스의 수직적 움직임 또는 회전
+
+* Zoom : 디바이스 렌즈의 초점 조절, 출력 화면의 확대 및 축소 
+
+## NVIF 파이썬 라이브러리 
+
+설치: 
+
+` pip3 install --upgrade onvif_zeep `
+
+실패시 onvif_zeep.tar.gz 를 받아서( ) 설치 :
+
+` cd python-onvif-zeep && python setup.py install `
+
+ONVIFCamera 라이브러리 적용 :
+<pre><code>
+from onvif import ONVIFCamera
+#Initialize ONVIFCamera 
+mycam = ONVIFCamera(IP_ADDRESS , PORT , USER , PASSWD ) `
+</pre></code>
+ONVIF 라이브러리 : http://www.onvif.org/onvif/ver20/util/operationIndex.html
+
+디바이스 정보 확인
+
+DeviceMGMT(Device Management)를 통해 디바이스의 정보를 확인 가능
+<pre><code>
+print("Device Model : %s" % mycam.devicemgmt.GetDeviceInformation()["Model"])
+print("MAC Address : %s" % mycam.devicemgmt.GetNetworkInterfaces()[0]["Info"]["HwAddress"])
+
+#Device Model : XNP-6040H
+#MAC addrress : E4:30:22:1F:CC:DD
+</pre></code>
+# PTZ(Pan-Tilt-Zoom)
+
+PTZ Service설정 :
+<pre><code>
+#Create ptz service
+ptz_service = mycam.create_ptz_service()
+
+#Get ptz configuration
+mycam.ptz.GetConfiguration()
 
 
-# 노드.JS To 파이썬
+#Get PTZ configuration
+request = ptz.create_type('GetConfigurationOptions')
+request.ConfigurationToken = media_profile.PTZConfiguration.token
+ptz_configuration_options = ptz.GetConfigurationOptions(request)
 
-## 1. 파이썬 부팅완료 여부 체크
+#Create request 
+moverequest = ptz.create_type('ContinuousMove')
+moverequest.ProfileToken = media_profile.token
+</pre></code>
+## ContinuousMove
 
-설명 : 파이썬 서버 부팅시, 자동 미디어 재생 완료여부 판단
+정의: 지속적인 PTZ 동작을 작동하기위한 함수. 기본적인 space set은 PTZConfiguration 적용.
 
-주소 : /api/boot/end
+기본적인 명령은 request를 통해 변경 가능
 
-메소드 : GET
+Input:
 
-수신 데이터 :0 또는 1
+[ContinuousMove]
 
-## 2. 카메라 등록 및 실시간 스트림 시작
+* ProfileToken [ReferenceToken] MediaProfile 참조 기능.
 
-설명 : 개별 구동
+* Velocity [PTZSpeed] : PTZ의 조작 속도 조절. 기본 설정 : 1.0
 
-주소 : /api/camera
+* PanTilt - optional; [Vector2D] Pan, Tilt의 속도 설정. x 컴포넌트는 Pan, y 컴포넌트는 Tilt에 상응. request 제외시 움직임 변화 없음
 
-메소드 : POST
+* Zoom - optional; [Vector1D] zoom의 속도 설정. 
 
-송신 데이터 : 
+* Timeout - optional; [duration] timeout 설정 옵션
 
-`{
-	"seq" : 1,
-	"gid" : 2,
-	"name" : "1번 카메라",
-	"iaddr" : "rtsp://admin:8922@192.168.0.101/video1",
-	"protocol" : "rtmp",
-	"isRec" : 0
-}`
+Output:
 
-응답 데이터 :
+[ContinuousMoveResponse]
 
-`{
-  "status" : 1 or 0,
-  "isRec" : 1 or 0,
-  "inserted" : "2020-02-05 11:22:33",
-  "updated" : "2020-02-05 11:22:33",
-  "stream_url" : "http://192.168.0.237:8000/{gid}/{seq}/hls/index.m3u8"
-}`
+예제:
 
-화면 출력 주소 : http://192.168.0.237:8000/{gid}/{seq}/index.m3u8
+<pre><code>
+YMAX = 1.0
+def move_right(ptz, request):
+  request.Velocity.PanTilt.x = 0
+  request.Velocity.PanTilt.y = YMAX
+  ptz.ContinousMove(request)
+</pre></code>
 
-## 3. 카메라 수정
+## Stop
 
-설명 : 카메라 수정. 녹화 종료시 record_url의 값 반환하고, 녹화가 시자되는 경우는 ""공백 또는 null널 값으로 반환.
+정의: 절대적, 상대적, 지속적 형식으로 진행중인 PTZ 움직임을 정지시키는 함수. Pan, tilt, zoom 의 설정이 없을시, 디바이스 전체동작 정지
 
-주소 : /api/camera
+Input:
 
-메소드 : PUT
+[Stop]
 
-송신 데이터 : 
+* ProfileToken [ReferenceToken] 무엇을 정지시킬 것 인지에 대한 MediaProfile을 참조 
 
-`{
-	"seq" : 1,
-	"b_gid" : 1,
-	"gid" : 1,
-	"name" : "1번 카메라",
-	"iaddr" : "rtsp://admin:8922@192.168.0.101/video1",
-	"protocol" : "rtmp",
-	"isRec" : 0
-}`
+* PanTilt - optional; [boolean] 진행중인 Pan과 Tilt 움직임를 멈추고자 할때 설정. 만약 특정 Pan,Tilt 인수가 제시되지 않았을때, Pan, Tilt 움직임을 정지 시킴.
 
-응답 데이터 :
+* Zoom - optional; [boolean] 진행중인 zoom 움직임을 멈추고자 할때 설정. 만약 특정 Pan,Tilt인수가 제시되지 않았을때, Zoom 움직임을 정지 시킴.
 
-`{
-  "status" : 1 or 0,
-  "isRec" : 1 or 0,
-  "inserted" : "2020-02-05 11:22:33",
-  "updated" : "2020-02-05 11:22:33",
-  "stream_url" : "http://192.168.0.237:8000/{gid}/{seq}/hls/index.m3u8",
-  "record_url" : "http://192.168.0.237:8000/{gid}/{seq}/{recordDate}/{recordStartTime}/index.m3u8"
-}`
+Output:
 
-## 4. 카메라 삭제 (등록정보 삭제)
+[StopResponse]
 
-설명 : 카메라 정보 삭제시, 파이썬 서버는 기존 정보를 삭제한다. 삭제 전용 폴더를 생성하여 넣어놓기를 바람. 삭제된 카메라의 녹화정보 삭제는 따로 메뉴로 뺄 것임.
+예제:
 
-주소 : /api/camera/seq/{seq}/gid/{gid}
-
-메소드 : DELETE
-
-수신 데이터 : 
-
-1(정상) or 0(비정상)
-
-## 5. 카메라 녹화 상태 변경
-
-설명 : 녹화. 녹화 종료시 record_url의 값 반환하고, 녹화가 시자되는 경우는 ""공백 또는 null널 값으로 반환.
-
-주소 : /api/camera/record/status
-
-메소드 : PUT
-
-송신 데이터 : 
-
-`{
-	"seq" : 1,
-	"gid" : 1,
-	"isRec" : 0 or 1
-}`
-
-응답 데이터 :
-
-`{
-  "status" : 1 or 0, *정상처리 여부*
-  "isRec" : 1 or 0, *처리가 완료된 시점의 상태값 전달*
-  "inserted" : "2020-02-05 11:22:33",
-  "updated" : "2020-02-05 11:22:33",
-  "stream_url" : "http://192.168.0.237:8000/{gid}/{seq}/hls/index.m3u8",
-  "record_url" : "http://192.168.0.237:8000/{gid}/{seq}/{recordDate}/{recordStartTime}/index.m3u8"
-}`
-
-# 파이썬 To 노드.JS
-
-## 1. 파이썬 서버 부팅
-
-설명 : 파이썬 서버 부팅을 위한 카메라 전체목록 조회
-
-주소 : /api/boot/start
-
-메소드 : GET
-
-송신 데이터 : 없음
-
-수신 데이터 :
-
-`[
-	{
-		"seq" : 1,
-		"gid" : 2,
-		"name" : "1번 카메라",
-		"iaddr" : "rtsp://admin:8922@192.168.0.101/video1",
-		"protocol" : "rtmp",
-		"isRec" : 0
-	},
-	{
-		"seq" : 2,
-		"gid" : 2,
-		"name" : "2번 카메라",
-		"iaddr" : "rtsp://admin:8922@192.168.0.101/video1",
-		"protocol" : "rtmp",
-		"isRec" : 0
-	}
-]`
+`ptz.Stop({'ProfileToken': request.ProfileToken})`
