@@ -63,7 +63,7 @@ App performs recording monitoring, recording scheduling, and cleaning.
 ## H.264 format
 h264 is an inevitable encoding format. It is much better than MJPEG. With the same frame rate, h264 will require five times smaller network bandwidth than MJPEG. That mean that at the same bit rate you will get much better image quality.
 
-
+![alt example](/images/gst.jpg "Gstreamer")
 
 # GStreamer
 
@@ -102,8 +102,7 @@ sudo apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 sudo apt-get install gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools`
 
 에러 발생시 한줄씩 설치:
-<pre><code>
-$ sudo apt-get install libgstreamer1.0-0 
+<pre><code>$ sudo apt-get install libgstreamer1.0-0 
 
 $ sudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good
 
@@ -116,8 +115,7 @@ $ sudo apt-get install gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools
 `$sudo apt-get install python-gst-1.0 python3-gst-1.0`
 
 dev-packages 설치 :
-<pre><code>
-$ sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+<pre><code>$ sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
 
 $ sudo apt-get install libfontconfig1-dev libfreetype6-dev libpng-dev
 
@@ -255,8 +253,7 @@ pipeline.set_state(Gst.State.NULL) #작업완료, EOS, 또는 에러 발생시 �
 
         I-frame (Intra frame) : 화면 전체가 압축되어 들어 있는 frame
 
-<pre><code>
-#EXTM3U
+<pre><code>#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-ALLOW-CACHE:NO
 #EXT-X-MEDIA-SEQUENCE:1
@@ -330,8 +327,7 @@ ONVIF 라이브러리 : http://www.onvif.org/onvif/ver20/util/operationIndex.htm
 디바이스 정보 확인
 
 DeviceMGMT(Device Management)를 통해 디바이스의 정보를 확인 가능
-<pre><code>
-print("Device Model : %s" % mycam.devicemgmt.GetDeviceInformation()["Model"])
+<pre><code>print("Device Model : %s" % mycam.devicemgmt.GetDeviceInformation()["Model"])
 print("MAC Address : %s" % mycam.devicemgmt.GetNetworkInterfaces()[0]["Info"]["HwAddress"])
 
 #Device Model : XNP-6040H
@@ -340,8 +336,7 @@ print("MAC Address : %s" % mycam.devicemgmt.GetNetworkInterfaces()[0]["Info"]["H
 # PTZ(Pan-Tilt-Zoom)
 
 PTZ Service설정 :
-<pre><code>
-#Create ptz service
+<pre><code>#Create ptz service
 ptz_service = mycam.create_ptz_service()
 
 #Get ptz configuration
@@ -383,8 +378,7 @@ Output:
 
 예제:
 
-<pre><code>
-YMAX = 1.0
+<pre><code>YMAX = 1.0
 def move_right(ptz, request):
   request.Velocity.PanTilt.x = 0
   request.Velocity.PanTilt.y = YMAX
