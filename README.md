@@ -64,6 +64,7 @@ App performs recording monitoring, recording scheduling, and cleaning.
 h264 is an inevitable encoding format. It is much better than MJPEG. With the same frame rate, h264 will require five times smaller network bandwidth than MJPEG. That mean that at the same bit rate you will get much better image quality.
 
 
+
 # GStreamer
 
 https://gstreamer.freedesktop.org/documentation
@@ -280,9 +281,11 @@ file000002.ts
 |#EXT-X-DISCONTINUITY | #EXT-X-DISCONTINUITY | 이 지시어가 표지된 줄을 기준으로 이전 줄과 이후 줄에서 재생하는 콘텐츠의 정보 변경되었음을 표시.|
 |#EXT-X-KEY |#EXT-X-KEY: <암호화 방법>[, <key>]| 암호화된 파일을 해독하는 키 값을 명시. HTTP Live Streaming에서는 재생 시간에 따라 분할된 각 파일을 암호화하여 전송. 암호화된 파일을 해독할 때 필요한 키 값을 플레이어에게 알려 주기 위해 사용. |
 
+![alt example](/images/onvif.png "ONVIF")
+
 # ONVIF
 
-## ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
+### ONVIF(Open Network Video Interface Forum) : IP Web Camera 제어 목적으로 사용하는 HTTP 기반 국제 표준 프로토콜. 
 
 네트워크 비디오 장치 간 통신의 표준화
 
