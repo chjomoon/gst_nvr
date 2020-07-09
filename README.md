@@ -399,16 +399,108 @@ mycam = ONVIFCamera(IP_ADDRESS , PORT , USER , PASSWD ) `
 </pre></code>
 ONVIF 라이브러리 : http://www.onvif.org/onvif/ver20/util/operationIndex.html
 
-디바이스 정보 확인
+### 디바이스 정보 확인
 
 DeviceMGMT(Device Management)를 통해 디바이스의 정보를 확인 가능
-<pre><code>print("Device Model : %s" % mycam.devicemgmt.GetDeviceInformation()["Model"])
-print("MAC Address : %s" % mycam.devicemgmt.GetNetworkInterfaces()[0]["Info"]["HwAddress"])
+<pre><code>print("Device Model : %s" % mycam.devicemgmt.GetDeviceInformation()["Model"]) #디바이스 모델정보
+print("MAC Address : %s" % mycam.devicemgmt.GetNetworkInterfaces()[0]["Info"]["HwAddress"]) #디바이스 MAC주소
+print(mycam.devicemgmt.GetCapabilities()['PTZ']) #PTZ 가능여부, 없을시 None
 
 #Device Model : XNP-6040H
 #MAC addrress : E4:30:22:1F:CC:DD
+"""
+{
+    'XAddr': 'http://192.168.0.5/onvif/ptz_service',
+    '_value_1': None,
+    '_attr_1': None
+}
+"""
 </pre></code>
-# PTZ(Pan-Tilt-Zoom)
+#### GetDeviceInformation
+
+##### Description:
+
+디바이스로부터 기본 기기 정보를 받아오는 기능
+
+##### Input:
+
+[GetDeviceInformation]
+
+##### Output:
+
+[GetDeviceInformationResponse]
+
+* Manufacturer [string]디바이스의 제조사.
+
+* Model [string] 디바이스 모델명.
+
+* FirmwareVersion [string] 디바이스의 펌웨어 버전.
+
+* SerialNumber [string] 디바이스의 시리얼 번호.
+
+* HardwareId [string] 디바이스의 HW 번호.
+
+
+#### GetNetworkInterfaces
+
+##### Description:
+
+디바이스로 부터 네트워크 인터페이스 설정을 받아오는 기능. 디바이스는  GetNetworkInterfaces 커멘드를 통해 NetworkInterface 타입되어 정의된 설정값을 반환한다. 
+
+##### Input:
+
+[GetNetworkInterfaces]
+
+##### Output:
+
+[GetNetworkInterfacesResponse]
+
+* NetworkInterfaces - unbounded; [NetworkInterface]List of network interfaces.
+
+* token - required; [ReferenceToken]물리적 엔터티를 참조하는 Unique identifier.
+
+* Enabled [boolean]인터페이스가 가능한지 여부를 표시 (True || False).
+
+* Info - optional; [NetworkInterfaceInfo]Network interface information
+
+* Name - optional; [string] 네트워크 인터페이스 이름 ex) eth0.
+
+* HwAddress [HwAddress] 네트워크 인터페이스 MAC 주소.
+
+* MTU - optional; [int] 최대 타임아웃 유닛 (Maximum Timeout Unit).
+
+* …
+
+
+#### GetCapabilities
+
+##### Description:
+
+좀더 일반적인 GetServices 메서드를  대체하는 메서드. 메서드를 통해 구동가능한 각각의 서비스를 확인가능.
+
+##### Input:
+
+[GetCapabilities]
+
+* Category - optional, unbounded; [CapabilityCategory]구동가능 정보를 참조하기 위한 enum 리스트.
+            - enum { 'All', 'Analytics', 'Device', 'Events', 'Imaging', 'Media', 'PTZ' }
+
+##### Output:
+
+[GetCapabilitiesResponse] 여러 기능을 확인 가능 함
+
+* Capabilities [Capabilities]Capability information.
+
+* …
+
+* PTZ - optional; [PTZCapabilities]PTZ capabilities
+
+* XAddr [anyURI]PTZ service URI.
+
+* …
+
+
+## PTZ(Pan-Tilt-Zoom)
 
 PTZ Service설정 :
 <pre><code>#Create ptz service
